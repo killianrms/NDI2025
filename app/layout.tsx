@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navigation from '@/components/Navigation'
+import ChatBot from '@/components/ChatBot'
 
 export const metadata: Metadata = {
   title: 'Numérique Responsable - NIRD',
@@ -20,6 +21,7 @@ export default function RootLayout({
         <main className="pt-16">
           {children}
         </main>
+        <ChatBot />
       </body>
     </html>
   )

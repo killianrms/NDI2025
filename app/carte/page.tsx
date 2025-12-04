@@ -15,9 +15,27 @@ const Map = dynamic(() => import('@/components/Map'), {
   ),
 })
 
+// Shuffle array function
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array]
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]]
+  }
+  return newArray
+}
+
+interface ShuffledQuestion {
+  question: string
+  options: string[]
+  correctIndex: number
+  explanation: string
+}
+
 export default function MapPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [showQuiz, setShowQuiz] = useState(false)
+  const [shuffledQuestions, setShuffledQuestions] = useState<ShuffledQuestion[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [score, setScore] = useState(0)
   const [quizCompleted, setQuizCompleted] = useState(false)
@@ -32,17 +50,43 @@ export default function MapPage() {
     setScore(0)
   }
 
+  const startQuiz = () => {
+    // Shuffle questions
+    const shuffled = shuffleArray(quizQuestions).map(q => {
+      // Create array of options with their original indices
+      const optionsWithIndices = q.options.map((opt, idx) => ({ option: opt, wasCorrect: idx === q.correct }))
+      // Shuffle options
+      const shuffledOptions = shuffleArray(optionsWithIndices)
+      // Find new index of correct answer
+      const correctIndex = shuffledOptions.findIndex(o => o.wasCorrect)
+
+      return {
+        question: q.question,
+        options: shuffledOptions.map(o => o.option),
+        correctIndex,
+        explanation: q.explanation,
+      }
+    })
+
+    setShuffledQuestions(shuffled)
+    setShowQuiz(true)
+    setCurrentQuestion(0)
+    setScore(0)
+    setSelectedAnswer(null)
+    setShowExplanation(false)
+  }
+
   const handleAnswer = (answerIndex: number) => {
     setSelectedAnswer(answerIndex)
     setShowExplanation(true)
 
-    if (answerIndex === quizQuestions[currentQuestion].correct) {
+    if (answerIndex === shuffledQuestions[currentQuestion].correctIndex) {
       setScore(score + 1)
     }
   }
 
   const handleNextQuestion = () => {
-    if (currentQuestion < quizQuestions.length - 1) {
+    if (currentQuestion < shuffledQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(null)
       setShowExplanation(false)
@@ -102,40 +146,40 @@ export default function MapPage() {
                 </div>
 
                 <button
-                  onClick={() => setShowQuiz(true)}
+                  onClick={startQuiz}
                   className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
                 >
                   Testez vos connaissances
                 </button>
 
                 {/* Quiz Section */}
-                {showQuiz && !quizCompleted && (
+                {showQuiz && !quizCompleted && shuffledQuestions.length > 0 && (
                   <div className="mt-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 animate-fade-in">
                     <div className="mb-4">
                       <div className="text-sm text-gray-600 mb-2">
-                        Question {currentQuestion + 1}/{quizQuestions.length}
+                        Question {currentQuestion + 1}/{shuffledQuestions.length}
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all"
-                          style={{ width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%` }}
+                          style={{ width: `${((currentQuestion + 1) / shuffledQuestions.length) * 100}%` }}
                         ></div>
                       </div>
                     </div>
 
                     <h3 className="text-xl font-bold text-gray-800 mb-4">
-                      {quizQuestions[currentQuestion].question}
+                      {shuffledQuestions[currentQuestion].question}
                     </h3>
 
                     <div className="space-y-3 mb-4">
-                      {quizQuestions[currentQuestion].options.map((option, index) => (
+                      {shuffledQuestions[currentQuestion].options.map((option, index) => (
                         <button
                           key={index}
                           onClick={() => !showExplanation && handleAnswer(index)}
                           disabled={showExplanation}
                           className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                             showExplanation
-                              ? index === quizQuestions[currentQuestion].correct
+                              ? index === shuffledQuestions[currentQuestion].correctIndex
                                 ? 'border-green-500 bg-green-50'
                                 : selectedAnswer === index
                                 ? 'border-red-500 bg-red-50'
@@ -150,7 +194,7 @@ export default function MapPage() {
 
                     {showExplanation && (
                       <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-4 animate-fade-in">
-                        <p className="text-gray-700">{quizQuestions[currentQuestion].explanation}</p>
+                        <p className="text-gray-700">{shuffledQuestions[currentQuestion].explanation}</p>
                       </div>
                     )}
 
@@ -159,7 +203,7 @@ export default function MapPage() {
                         onClick={handleNextQuestion}
                         className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
                       >
-                        {currentQuestion < quizQuestions.length - 1 ? 'Question suivante' : 'Voir le résultat'}
+                        {currentQuestion < shuffledQuestions.length - 1 ? 'Question suivante' : 'Voir le résultat'}
                       </button>
                     )}
                   </div>
@@ -169,26 +213,19 @@ export default function MapPage() {
                 {quizCompleted && (
                   <div className="mt-6 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-8 text-white text-center animate-fade-in">
                     <div className="text-6xl mb-4">
-                      {score === quizQuestions.length ? '🏆' : score >= quizQuestions.length / 2 ? '🌟' : '💪'}
+                      {score === shuffledQuestions.length ? '🏆' : score >= shuffledQuestions.length / 2 ? '🌟' : '💪'}
                     </div>
                     <h3 className="text-3xl font-bold mb-2">Quiz terminé</h3>
-                    <p className="text-2xl mb-4">Score : {score}/{quizQuestions.length}</p>
+                    <p className="text-2xl mb-4">Score : {score}/{shuffledQuestions.length}</p>
                     <p className="text-lg opacity-90">
-                      {score === quizQuestions.length
+                      {score === shuffledQuestions.length
                         ? 'Parfait ! Vous êtes un expert du numérique responsable'
-                        : score >= quizQuestions.length / 2
+                        : score >= shuffledQuestions.length / 2
                         ? 'Bien joué ! Continuez à apprendre'
                         : 'Continuez vos efforts, chaque pas compte'}
                     </p>
                     <button
-                      onClick={() => {
-                        setShowQuiz(false)
-                        setQuizCompleted(false)
-                        setCurrentQuestion(0)
-                        setScore(0)
-                        setSelectedAnswer(null)
-                        setShowExplanation(false)
-                      }}
+                      onClick={startQuiz}
                       className="mt-6 bg-white text-green-600 px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
                     >
                       Recommencer
