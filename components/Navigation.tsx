@@ -12,7 +12,6 @@ export default function Navigation() {
     { href: '/cycle-de-vie', label: 'Cycle de Vie' },
     { href: '/carte', label: 'Carte Interactive' },
     { href: '/escape-game', label: 'Escape Game' },
-    { href: '/classement', label: 'Classement' },
   ]
 
   return (

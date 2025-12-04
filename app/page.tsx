@@ -43,18 +43,12 @@ export default function Home() {
           <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto animate-slide-up">
             Découvrez les enjeux du numérique responsable de manière ludique et interactive
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
+          <div className="flex justify-center animate-slide-up">
             <Link
               href="/simulateur"
               className="px-8 py-4 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
             >
               Commencer l'Aventure
-            </Link>
-            <Link
-              href="/classement"
-              className="px-8 py-4 bg-white text-gray-800 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all border-2 border-gray-200"
-            >
-              Voir le Classement
             </Link>
           </div>
         </div>
