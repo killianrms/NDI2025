@@ -30,6 +30,13 @@ export default function Home() {
       href: '/escape-game',
       color: 'from-orange-500 to-red-500',
     },
+    {
+      title: 'Password Game',
+      description: 'Créez le mot de passe le plus frustrant possible',
+      icon: '🎮',
+      href: '/password-game',
+      color: 'from-red-500 to-orange-500',
+    },
   ]
 
   return (
