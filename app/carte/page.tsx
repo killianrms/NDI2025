@@ -41,6 +41,8 @@ export default function MapPage() {
   const [quizCompleted, setQuizCompleted] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
+  const [userAnswers, setUserAnswers] = useState<number[]>([])
+  const [showResults, setShowResults] = useState(false)
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project)
@@ -48,6 +50,7 @@ export default function MapPage() {
     setQuizCompleted(false)
     setCurrentQuestion(0)
     setScore(0)
+    setShowResults(false)
   }
 
   const startQuiz = () => {
@@ -74,6 +77,8 @@ export default function MapPage() {
     setScore(0)
     setSelectedAnswer(null)
     setShowExplanation(false)
+    setUserAnswers([])
+    setShowResults(false)
   }
 
   const handleAnswer = (answerIndex: number) => {
@@ -86,6 +91,10 @@ export default function MapPage() {
   }
 
   const handleNextQuestion = () => {
+    if (selectedAnswer !== null) {
+      setUserAnswers([...userAnswers, selectedAnswer])
+    }
+
     if (currentQuestion < shuffledQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(null)
@@ -211,25 +220,72 @@ export default function MapPage() {
 
                 {/* Quiz Results */}
                 {quizCompleted && (
-                  <div className="mt-6 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-8 text-white text-center animate-fade-in">
-                    <div className="text-6xl mb-4">
-                      {score === shuffledQuestions.length ? '🏆' : score >= shuffledQuestions.length / 2 ? '🌟' : '💪'}
+                  <div className="mt-6 animate-fade-in space-y-4">
+                    <div className="bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-8 text-white text-center">
+                      <div className="text-6xl mb-4">
+                        {score === shuffledQuestions.length ? '🏆' : score >= shuffledQuestions.length / 2 ? '🌟' : '💪'}
+                      </div>
+                      <h3 className="text-3xl font-bold mb-2">Quiz terminé</h3>
+                      <p className="text-2xl mb-4">Score : {score}/{shuffledQuestions.length}</p>
+                      <p className="text-lg opacity-90">
+                        {score === shuffledQuestions.length
+                          ? 'Parfait ! Vous êtes un expert du numérique responsable'
+                          : score >= shuffledQuestions.length / 2
+                          ? 'Bien joué ! Continuez à apprendre'
+                          : 'Continuez vos efforts, chaque pas compte'}
+                      </p>
+
+                      <div className="flex gap-4 mt-6">
+                        <button
+                          onClick={() => setShowResults(!showResults)}
+                          className="flex-1 bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+                        >
+                          {showResults ? 'Masquer' : 'Voir les réponses'}
+                        </button>
+                        <button
+                          onClick={startQuiz}
+                          className="flex-1 bg-white/20 text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/30 transition-all"
+                        >
+                          Recommencer
+                        </button>
+                      </div>
                     </div>
-                    <h3 className="text-3xl font-bold mb-2">Quiz terminé</h3>
-                    <p className="text-2xl mb-4">Score : {score}/{shuffledQuestions.length}</p>
-                    <p className="text-lg opacity-90">
-                      {score === shuffledQuestions.length
-                        ? 'Parfait ! Vous êtes un expert du numérique responsable'
-                        : score >= shuffledQuestions.length / 2
-                        ? 'Bien joué ! Continuez à apprendre'
-                        : 'Continuez vos efforts, chaque pas compte'}
-                    </p>
-                    <button
-                      onClick={startQuiz}
-                      className="mt-6 bg-white text-green-600 px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-                    >
-                      Recommencer
-                    </button>
+
+                    {/* Detailed Results */}
+                    {showResults && (
+                      <div className="bg-white rounded-xl p-6 border-2 border-gray-200 animate-fade-in">
+                        <h4 className="text-xl font-bold mb-4 text-gray-800">Récapitulatif des réponses</h4>
+                        <div className="space-y-4">
+                          {shuffledQuestions.map((q, index) => {
+                            const userAnswer = userAnswers[index]
+                            const isCorrect = userAnswer === q.correctIndex
+
+                            return (
+                              <div key={index} className={`p-4 rounded-xl border-2 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'}`}>
+                                <div className="flex items-start gap-2 mb-2">
+                                  <span className="text-xl">{isCorrect ? '✅' : '❌'}</span>
+                                  <div className="flex-1">
+                                    <p className="font-semibold text-gray-800 mb-2">Q{index + 1}: {q.question}</p>
+
+                                    {!isCorrect && (
+                                      <div className="mb-2">
+                                        <p className="text-sm text-red-700">Votre réponse : {q.options[userAnswer]}</p>
+                                      </div>
+                                    )}
+
+                                    <div className="mb-2">
+                                      <p className="text-sm text-green-700 font-semibold">Bonne réponse : {q.options[q.correctIndex]}</p>
+                                    </div>
+
+                                    <p className="text-sm text-gray-600 italic">{q.explanation}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
