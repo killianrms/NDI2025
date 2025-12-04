@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
         },
         ...messages,
       ],
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       temperature: 1.2,
       max_tokens: 300,
     })
