@@ -150,9 +150,7 @@ export default function Home() {
                                     <div className="text-6xl mb-4">{feature.icon}</div>
                                     <h3 className="text-2xl font-bold mb-3 text-gray-800">{feature.title}</h3>
                                     <p className="text-gray-600 mb-4">{feature.description}</p>
-                                    <span
-                                        className="inline-flex items-center text-green-600 font-semibold group-hover:gap-2 transition-all">
-                    Découvrir
+                                    <span className="inline-flex items-center text-green-600 font-semibold group-hover:gap-2 transition-all">Découvrir
                     <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none"
                          stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
@@ -161,29 +159,6 @@ export default function Home() {
                                 </div>
                             </Link>
                         ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Stats Section */}
-            <section className="py-16 px-4">
-                <div className="max-w-6xl mx-auto">
-                    <div className="bg-gradient-to-r from-green-500 to-blue-500 rounded-3xl p-12 text-white">
-                        <h2 className="text-3xl font-bold text-center mb-12">Impact de la Communauté</h2>
-                        <div className="grid md:grid-cols-3 gap-8 text-center">
-                            <div>
-                                <div className="text-5xl font-bold mb-2">2.5k+</div>
-                                <div className="text-green-100">Utilisateurs Actifs</div>
-                            </div>
-                            <div>
-                                <div className="text-5xl font-bold mb-2">15k+</div>
-                                <div className="text-green-100">Badges Débloqués</div>
-                            </div>
-                            <div>
-                                <div className="text-5xl font-bold mb-2">500+</div>
-                                <div className="text-green-100">Défis Complétés</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
