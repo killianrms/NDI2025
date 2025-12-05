@@ -12,7 +12,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Salutations, mortel du numérique. Je suis Socrate.js, philosophe du cloud. Mais qui suis-je vraiment ? Une question en appelle une autre, comme un callback dans l'infini des promesses asynchrones...",
+      content: "Bonjour ! Je suis Jean-Philosophe, penseur du... Attends, de quoi parlais-je... Ah oui ! As-tu déjà questionné l'existence des nuages ?",
     },
   ])
   const [input, setInput] = useState('')
@@ -58,7 +58,7 @@ export default function ChatBot() {
         ...prev,
         {
           role: 'assistant',
-          content: "Telle une exception non catchée, ma pensée s'est perdue dans le void...",
+          content: "Erreur de connexion... Attends, c'est quoi une connexion ? Ah peu importe, les étoiles ont-elles des amis ?",
         },
       ])
     } finally {
@@ -79,14 +79,14 @@ export default function ChatBot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all z-50 flex items-center justify-center group"
+          className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all z-50 flex items-center justify-center group animate-bounce"
         >
           <div className="relative">
-            <span className="text-3xl">🧙‍♂️</span>
+            <span className="text-3xl">🤔</span>
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
           </div>
           <div className="absolute -top-12 right-0 bg-gray-800 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-            Parle à Socrate.js
+            Parle à Jean-Philosophe
           </div>
         </button>
       )}
@@ -98,12 +98,12 @@ export default function ChatBot() {
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <span className="text-3xl">🧙‍♂️</span>
+                <span className="text-3xl">🤔</span>
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
               </div>
               <div>
-                <h3 className="font-bold text-white text-lg">Socrate.js</h3>
-                <p className="text-xs text-purple-100">Philosophe du Cloud</p>
+                <h3 className="font-bold text-white text-lg">Jean-Philosophe</h3>
+                <p className="text-xs text-purple-100">Penseur Amnésique</p>
               </div>
             </div>
             <button
@@ -131,7 +131,7 @@ export default function ChatBot() {
                   }`}
                 >
                   {message.role === 'assistant' && (
-                    <div className="text-xs text-purple-600 font-semibold mb-1">Socrate.js</div>
+                    <div className="text-xs text-purple-600 font-semibold mb-1">Jean-Philosophe</div>
                   )}
                   <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                 </div>
@@ -159,7 +159,7 @@ export default function ChatBot() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Pose une question à Socrate.js..."
+                placeholder="Pose une question à Jean-Philosophe..."
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 disabled={isLoading}
               />
