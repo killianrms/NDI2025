@@ -19,13 +19,13 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Nuit de l'Info 2025 Défi :</h3>
             <p className="text-gray-300 text-sm mb-2">
-                La Ligue des Extensions : Manifestement à jour, open source et utile.
+                - La Ligue des Extensions : Manifestement à jour, open source et utile.
             </p>
-             <p className="text-gray-300 text-sm">
-                L'ergonomie : simplifier pour mieux vivre.
+             <p className="text-gray-300 text-sm mb-2">
+                - L'ergonomie : simplifier pour mieux vivre.
              </p>
-              <p className="text-gray-300 text-sm">
-                  Chat'bruti
+              <p className="text-gray-300 text-sm mb-2">
+                  - Chat'bruti
               </p>
           </div>
 
@@ -60,11 +60,6 @@ export default function Footer() {
               <li>
                 <Link href="/test-connaissances" className="text-gray-300 hover:text-green-400 transition-colors">
                   Test tes Connaissances
-                </Link>
-              </li>
-              <li>
-                <Link href="/carte" className="text-gray-300 hover:text-green-400 transition-colors">
-                  Carte Interactive
                 </Link>
               </li>
             </ul>

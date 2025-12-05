@@ -17,13 +17,6 @@ export default function Home() {
       color: 'from-green-500 to-emerald-500',
     },
     {
-      title: 'Carte Interactive',
-      description: 'Découvrez l\'Ob.i LAB à Montpellier',
-      icon: '🗺️',
-      href: '/carte',
-      color: 'from-purple-500 to-pink-500',
-    },
-    {
       title: 'Password Game',
       description: 'Créez le mot de passe le plus frustrant possible',
       icon: '🎮',

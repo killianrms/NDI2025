@@ -10,7 +10,6 @@ export default function Navigation() {
     { href: '/', label: 'Accueil' },
     { href: '/simulateur', label: 'Simulateur' },
     { href: '/test-connaissances', label: 'Test tes Connaissances' },
-    { href: '/carte', label: 'Carte Interactive' },
     { href: '/password-game', label: 'Password Game' },
   ]
 
