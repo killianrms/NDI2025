@@ -14,4 +14,6 @@ npm run dev
 
 Ouvrir [http://localhost:3000](http://localhost:3000)
 
+### Possibilité pour le PassWord Game
+
 <362025kWhdécembrecoII
