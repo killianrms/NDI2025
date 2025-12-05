@@ -105,6 +105,7 @@ export const translations = {
           title: 'The League of Extensions',
           description: `Chrome Extension Manifest V3, to check link's safety, open source and useful to improve daily browsing`,
           tagline: 'Clearly up to date, open source and useful',
+          link: 'https://github.com/Mael-Nicolas/SafeLink',
         },
 
         ergonomics: {
