@@ -69,23 +69,29 @@ export default function Home() {
 
                     <div className="grid md:grid-cols-3 gap-6">
                         {/* Défi 1: La Ligue des Extensions */}
-                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                            <div className="flex items-center gap-2 mb-3">
-                                <span className="text-3xl">🔧</span>
-                                <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
-                                    {t.home.challenges.extensions.tag}
+                        <a href={t.home.challenges.extensions.link} target="_blank" rel="noopener noreferrer"
+                           className="block">
+                            <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-2 border-blue-200">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-3xl">🔧</span>
+                                    <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
+                                        {t.home.challenges.extensions.tag}
+                                    </div>
+                                </div>
+                                <h3 className="text-xl font-bold mb-2 text-gray-800">
+                                    {t.home.challenges.extensions.title}
+                                </h3>
+                                <p className="text-sm text-gray-600 mb-3">
+                                    {t.home.challenges.extensions.description}
+                                </p>
+                                <div className="text-xs text-gray-500 italic mb-2">
+                                    {t.home.challenges.extensions.tagline}
+                                </div>
+                                <div className="text-xs text-blue-600 hover:text-blue-800 font-semibold">
+                                    → Voir sur GitHub
                                 </div>
                             </div>
-                            <h3 className="text-xl font-bold mb-2 text-gray-800">
-                                {t.home.challenges.extensions.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 mb-3">
-                                {t.home.challenges.extensions.description}
-                            </p>
-                            <div className="text-xs text-gray-500 italic">
-                                {t.home.challenges.extensions.tagline}
-                            </div>
-                        </div>
+                        </a>
 
                         {/* Défi 2: L'ergonomie */}
                         <Link href="/password-game"
