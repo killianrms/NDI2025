@@ -30,6 +30,13 @@ export default function Home() {
       href: '/password-game',
       color: 'from-red-500 to-orange-500',
     },
+    {
+      title: 'Jean-Philosophe',
+      description: 'Discutez avec notre philosophe amnésique complètement à côté de la plaque',
+      icon: '🤔',
+      href: '/chatbot',
+      color: 'from-purple-500 to-pink-500',
+    },
   ]
 
   return (
