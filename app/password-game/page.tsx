@@ -1,51 +1,11 @@
-/**
- * ============================================================================
- * PASSWORD GAME - PAGE PRINCIPALE
- * ============================================================================
- *
- * Cette page contient le jeu de mot de passe frustrant.
- *
- * FONCTIONNALITÉS IMPLÉMENTÉES :
- * -------------------------------
- * - 15 règles progressives qui se débloquent au fur et à mesure
- * - Validation en temps réel avec feedback visuel
- * - Éléments UI frustrants :
- *   * Champ de validation qui se déplace en bas à droite
- *   * Checkbox qui bouge constamment
- *   * Timer qui réinitialise la progression
- * - Règles liées au thème du numérique responsable
- * - Système de hints pour aider l'utilisateur
- *
- * COMMENT TESTER :
- * ----------------
- * 1. Accéder à /password-game
- * 2. Commencer à taper un mot de passe
- * 3. Les règles apparaissent progressivement
- * 4. Essayer de valider avec la checkbox qui bouge !
- *
- * COMMENT AUGMENTER LA DIFFICULTÉ :
- * ----------------------------------
- * - Ajouter de nouvelles règles dans password-game-rules.ts
- * - Réduire le temps du timer (TIMER_DURATION)
- * - Augmenter la vitesse de la checkbox (CHECKBOX_SPEED)
- * - Ajouter des règles contradictoires supplémentaires
- */
-
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { RULES, validatePassword, loadDynamicValues, PasswordRule } from '@/lib/password-game-rules'
 import Link from 'next/link'
 
-// ============================================================================
-// CONSTANTES DE CONFIGURATION
-// ============================================================================
-
-// Durée du timer en secondes (après ce délai, la progression est réinitialisée)
-const TIMER_DURATION = 120 // 2 minutes
-
-// Vitesse de déplacement de la checkbox (en ms)
-const CHECKBOX_SPEED = 2000 // Bouge toutes les 2 secondes
+const TIMER_DURATION = 180
+const CHECKBOX_SPEED = 500 // Bouge toutes les 0.5 secondes (beaucoup plus rapide !)
 
 // Positions possibles pour la checkbox mobile
 const CHECKBOX_POSITIONS = [
@@ -54,6 +14,11 @@ const CHECKBOX_POSITIONS = [
   { top: '80%', left: '10%' },
   { top: '80%', right: '10%' },
   { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' },
+  { top: '30%', left: '20%' },
+  { top: '60%', right: '30%' },
+  { top: '20%', left: '70%' },
+  { top: '70%', left: '60%' },
+  { top: '40%', right: '15%' },
 ]
 
 // ============================================================================
@@ -113,14 +78,10 @@ export default function PasswordGamePage() {
     return () => clearInterval(timer)
   }, [gameCompleted])
 
-  // Validation automatique : avancer quand la règle courante est validée
+  // Validation automatique : avancer instantanément quand la règle courante est validée
   useEffect(() => {
     if (valid && validatedRules.length > validatedRulesCount && validatedRules.length < RULES.length) {
-      // Petit délai pour que l'utilisateur voie la validation
-      const timeout = setTimeout(() => {
-        setValidatedRulesCount(validatedRules.length)
-      }, 500)
-      return () => clearTimeout(timeout)
+      setValidatedRulesCount(validatedRules.length)
     }
   }, [valid, validatedRules.length, validatedRulesCount])
 
@@ -302,6 +263,7 @@ export default function PasswordGamePage() {
 
         {/* Règle actuelle (une seule à la fois) */}
         <div className="space-y-4">
+          {/* Règle actuelle (la prochaine non validée) */}
           {(() => {
             const currentRule = getCurrentRule()
             if (!currentRule) return null
@@ -351,6 +313,36 @@ export default function PasswordGamePage() {
               </div>
             )
           })()}
+
+          {/* Règles validées précédentes en vert (en dessous) */}
+          {getUnlockedRules()
+            .filter((rule) => validatedRules.includes(rule.id))
+            .map((rule, index) => {
+              const ruleIndex = RULES.findIndex((r) => r.id === rule.id)
+              return (
+                <div
+                  key={rule.id}
+                  className="rounded-xl p-6 shadow-lg transition-all bg-green-50 border-2 border-green-400 opacity-70"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold bg-green-500 text-white">
+                      ✓
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-800 mb-1 flex items-center gap-2">
+                        {rule.title}
+                        {rule.isContradictory && (
+                          <span className="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded-full">
+                            ⚠️ Contradictoire
+                          </span>
+                        )}
+                      </h3>
+                      <p className="text-gray-600 text-sm">{rule.description}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
         </div>
 
         {/* Message quand toutes les règles sont respectées */}
@@ -410,7 +402,7 @@ export default function PasswordGamePage() {
               checked={isCheckboxChecked}
               onChange={(e) => {
                 setIsCheckboxChecked(e.target.checked)
-                if (e.target.checked && validationInput === password) {
+                if (e.target.checked && validationInput.toLowerCase() === password.toLowerCase()) {
                   handleFinalValidation()
                 }
               }}

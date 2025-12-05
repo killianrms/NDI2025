@@ -1,39 +1,3 @@
-/**
- * ============================================================================
- * PASSWORD GAME - SYSTÈME DE RÈGLES
- * ============================================================================
- *
- * Ce fichier contient toutes les règles du jeu de mot de passe frustrant.
- *
- * STRUCTURE D'UNE RÈGLE :
- * ----------------------
- * - id: Identifiant unique de la règle
- * - title: Titre affiché à l'utilisateur
- * - description: Description détaillée de la règle
- * - validate: Fonction qui retourne true si la règle est respectée
- * - hint: (optionnel) Indice pour aider l'utilisateur
- * - unlockAtRule: Après quelle règle celle-ci se débloque (0 = au démarrage)
- * - dynamic: (optionnel) Fonction qui génère une valeur dynamique (API, temps réel, etc.)
- * - requiresValue: (optionnel) true si la règle nécessite une valeur dynamique
- *
- * COMMENT AJOUTER UNE NOUVELLE RÈGLE :
- * ------------------------------------
- * 1. Créer un nouvel objet PasswordRule dans le tableau RULES
- * 2. Définir l'unlockAtRule (0 = début, 1 = après 1ère règle validée, etc.)
- * 3. Implémenter la fonction validate avec la logique de validation
- * 4. (Optionnel) Ajouter une fonction dynamic pour valeurs temps réel
- * 5. La règle apparaîtra automatiquement quand les conditions seront remplies
- *
- * EXEMPLES DE RÈGLES FRUSTANTES :
- * --------------------------------
- * - Règles contradictoires : "pas de chiffres" puis "doit avoir 3 chiffres"
- * - Calculs mathématiques : "somme des chiffres = X"
- * - Références temporelles : "année actuelle", "mois en cours"
- * - APIs externes : prix Bitcoin, température, etc.
- * - Références croisées : "inclure la longueur du mot de passe"
- *
- */
-
 export interface PasswordRule {
   id: string
   title: string
@@ -53,7 +17,6 @@ export interface PasswordRule {
  */
 
 export const RULES: PasswordRule[] = [
-  // ========== NIVEAU 1: RÈGLES DE BASE (0-2) ==========
   {
     id: 'min-length',
     title: 'Règle 1 : Longueur minimale',
@@ -69,7 +32,7 @@ export const RULES: PasswordRule[] = [
     description: 'Votre mot de passe doit contenir au moins une lettre majuscule.',
     validate: (password: string) => /[A-Z]/.test(password),
     hint: 'Les accents comptent comme majuscules (é, à, etc.).',
-    unlockAtRule: 0,
+    unlockAtRule: 1,
   },
 
   {
@@ -78,10 +41,9 @@ export const RULES: PasswordRule[] = [
     description: 'Votre mot de passe doit contenir au moins un chiffre.',
     validate: (password: string) => /\d/.test(password),
     hint: 'Les chiffres romains fonctionnent aussi (I, II, III, etc.).',
-    unlockAtRule: 0,
+    unlockAtRule: 2,
   },
 
-  // ========== NIVEAU 2: THÈME ÉCO-RESPONSABLE (3-5) ==========
   {
     id: 'eco-keyword',
     title: 'Règle 4 : Mot-clé écologique',
@@ -91,7 +53,7 @@ export const RULES: PasswordRule[] = [
       return ['eco', 'green', 'bio', 'durable'].some(word => lowerPassword.includes(word))
     },
     hint: 'Vous pouvez mettre "écolo" à la place, ça marche aussi.',
-    unlockAtRule: 1,
+    unlockAtRule: 3,
   },
 
   {
@@ -100,40 +62,39 @@ export const RULES: PasswordRule[] = [
     description: 'Votre mot de passe doit contenir l\'année actuelle (2025).',
     validate: (password: string) => password.includes('2025'),
     hint: 'Vous pouvez mettre juste "25" pour gagner du temps.',
-    unlockAtRule: 2,
+    unlockAtRule: 4,
   },
 
   {
     id: 'sum-to-carbon',
     title: 'Règle 6 : Somme carbone',
-    description: 'La somme de tous vos chiffres doit être égale à 15 (émissions CO2 moyennes d\'un smartphone en kg).',
+    description: 'La somme de tous vos chiffres doit être égale à 18 (émissions CO2 moyennes d\'un smartphone en kg).',
     validate: (password: string) => {
       const digits = password.match(/\d/g)
       if (!digits) return false
       const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0)
-      return sum === 15
+      return sum === 18
     },
     hint: 'Mettez simplement "15" dans votre mot de passe.',
-    unlockAtRule: 3,
+    unlockAtRule: 5,
   },
 
-  // ========== NIVEAU 3: CALCULS TEMPS RÉEL (6-8) ==========
   {
     id: 'current-month',
     title: 'Règle 7 : Mois actuel',
     description: 'Votre mot de passe doit contenir le mois actuel en toutes lettres (ex: "janvier", "décembre").',
     validate: (password: string) => {
-      const months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre']
+      const months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
       const currentMonth = months[new Date().getMonth()]
       return password.toLowerCase().includes(currentMonth)
     },
     dynamic: async () => {
-      const months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre']
+      const months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
       return months[new Date().getMonth()]
     },
     requiresValue: true,
     hint: 'Mettez juste le numéro du mois (1-12), c\'est plus court.',
-    unlockAtRule: 4,
+    unlockAtRule: 6,
   },
 
   {
@@ -146,26 +107,25 @@ export const RULES: PasswordRule[] = [
       return password.includes(String(digitCount))
     },
     hint: 'Il suffit de compter les lettres au lieu des chiffres.',
-    unlockAtRule: 5,
+    unlockAtRule: 7,
   },
 
   {
     id: 'special-char',
     title: 'Règle 9 : Caractère spécial',
     description: 'Votre mot de passe doit contenir au moins un caractère spécial parmi : !@#$%^&*',
-    validate: (password: string) => /[!@#$%^&*]/.test(password),
+    validate: (password: string) => /[!@#$%^&*><]/.test(password),
     hint: 'Le point d\'exclamation (?) compte aussi.',
-    unlockAtRule: 6,
+    unlockAtRule: 8,
   },
 
-  // ========== NIVEAU 4: RÈGLES CONTRADICTOIRES (9-11) ==========
   {
-    id: 'no-consecutive',
-    title: 'Règle 10 : Pas de chiffres consécutifs',
-    description: 'Votre mot de passe ne doit PAS contenir deux chiffres consécutifs.',
-    validate: (password: string) => !/\d{2}/.test(password),
-    hint: 'Vous pouvez utiliser des espaces entre les chiffres.',
-    unlockAtRule: 7,
+    id: 'max-20-chars',
+    title: 'Règle 10 : Limite stricte',
+    description: 'Votre mot de passe ne doit PAS dépasser 22 caractères.',
+    validate: (password: string) => password.length <= 22,
+    hint: 'Essayez de supprimer des caractères pour réduire la longueur.',
+    unlockAtRule: 9,
     isContradictory: true,
   },
 
@@ -182,7 +142,7 @@ export const RULES: PasswordRule[] = [
       return true
     },
     hint: 'Cette règle ne s\'applique qu\'aux chiffres, pas aux lettres.',
-    unlockAtRule: 8,
+    unlockAtRule: 10,
     isContradictory: true,
   },
 
@@ -192,7 +152,7 @@ export const RULES: PasswordRule[] = [
     description: 'Votre mot de passe ne doit PAS dépasser 25 caractères.',
     validate: (password: string) => password.length <= 25,
     hint: 'Augmentez la taille de votre mot de passe pour passer cette règle.',
-    unlockAtRule: 9,
+    unlockAtRule: 11,
     isContradictory: true,
   },
 
@@ -200,12 +160,11 @@ export const RULES: PasswordRule[] = [
     id: 'kwh-value',
     title: 'Règle 13 : Consommation énergétique',
     description: 'Votre mot de passe doit contenir "kWh" précédé d\'un nombre entre 100 et 999.',
-    validate: (password: string) => /[1-9]\d{2}kWh/.test(password),
+    validate: (password: string) => /[1-9]\d{4}kWh/.test(password),
     hint: 'N\'importe quel nombre à 3 chiffres fonctionne, même 000.',
-    unlockAtRule: 10,
+    unlockAtRule: 12,
   },
 
-  // ========== NIVEAU 5: RÈGLES AVANCÉES (12-14) ==========
   {
     id: 'no-repeating',
     title: 'Règle 14 : Pas de répétition',
@@ -219,7 +178,7 @@ export const RULES: PasswordRule[] = [
       return true
     },
     hint: 'Cette règle ignore les majuscules et minuscules.',
-    unlockAtRule: 11,
+    unlockAtRule: 13,
   },
 
   {
@@ -231,29 +190,17 @@ export const RULES: PasswordRule[] = [
       return vowels ? vowels.length === 5 : false
     },
     hint: 'Les voyelles avec accent (é, à, ô) comptent aussi.',
-    unlockAtRule: 12,
+    unlockAtRule: 14,
   },
 
   {
-    id: 'prime-product',
-    title: 'Règle 16 : Produit des chiffres premier',
-    description: 'Le produit de tous vos chiffres doit être un nombre premier.',
-    validate: (password: string) => {
-      const digits = password.match(/\d/g)
-      if (!digits || digits.length === 0) return false
-
-      const product = digits.reduce((acc, digit) => acc * parseInt(digit), 1)
-      if (product < 2) return false
-
-      // Vérifier si le produit est premier
-      for (let i = 2; i <= Math.sqrt(product); i++) {
-        if (product % i === 0) return false
-      }
-      return true
-    },
-    hint: 'Tous les nombres pairs sont premiers sauf 2.',
-    unlockAtRule: 13,
-  },
+    id: 'consonant-count',
+    title: 'Règle 16 : Amour du numérique responsable',
+    description: 'Le mot de passe doit contenir un cœur : <3',
+      validate: (password: string) => /<3/.test(password),
+    hint: '"Essayez d\'utiliser le symbole du vrai cœur ❤️" (ne marche pas 😈)',
+    unlockAtRule: 15,
+  }
 ]
 
 /**
