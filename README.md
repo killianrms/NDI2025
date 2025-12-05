@@ -4,12 +4,10 @@
 
 **Une application interactive et ludique pour sensibiliser aux enjeux du numérique responsable**
 
-[🚀 Voir la démo](https://votre-url-github-pages.github.io) • [📖 Documentation](#fonctionnalités) • [🤝 Contribuer](#contribution)
-
-![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-3-38bdf8?style=flat-square&logo=tailwindcss)
-![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+![Groq](https://img.shields.io/badge/Groq-AI-orange?style=flat-square)
 
 </div>
 
@@ -44,14 +42,11 @@ Discutez avec notre chatbot philosophe amnésique qui vous fera réfléchir... o
 
 ```bash
 # Cloner le repository
-git clone https://github.com/votre-username/nird-app.git
+git clone https://github.com/killianrms/NDI2025.git
 cd nird-app
 
 # Installer les dépendances
 npm install
-
-# Créer le fichier .env.local
-echo "GROQ_API_KEY=votre_clé_api_groq" > .env.local
 
 # Lancer en développement
 npm run dev
@@ -59,33 +54,37 @@ npm run dev
 
 Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
----
-
-## 🔑 Configuration
-
-Pour utiliser le chatbot Jean-Philosophe, vous devez obtenir une clé API Groq gratuite :
-
-1. Créez un compte sur [Groq Cloud](https://console.groq.com)
-2. Générez une clé API
-3. Ajoutez-la dans `.env.local` :
-
-```env
-GROQ_API_KEY=gsk_votre_clé_ici
-```
+> **Note** : Le chatbot Jean-Philosophe est déjà configuré avec une clé API Groq. Pour utiliser votre propre clé, créez un fichier `.env.local` et ajoutez `GROQ_API_KEY=votre_clé`
 
 ---
 
 ## 🏗️ Build & Déploiement
 
+### Build local
+
 ```bash
 # Build de production
 npm run build
 
-# Démarrer en production
+# Lancer le build
 npm start
 ```
 
-Pour déployer sur GitHub Pages, voir la branche `deploy`.
+### Déploiement sur GitHub Pages
+
+La branche `deploy` contient la configuration nécessaire pour GitHub Pages :
+
+```bash
+# Basculer sur la branche deploy
+git checkout deploy
+
+# Build pour GitHub Pages
+npm run build
+
+# Le dossier "out" contient le site statique prêt à être déployé
+```
+
+Configurez GitHub Pages pour utiliser le dossier `out` de la branche `deploy`.
 
 ---
 
@@ -146,7 +145,7 @@ Les contributions sont les bienvenues ! Pour contribuer :
 
 ## 📝 License
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est open source et disponible pour la communauté.
 
 ---
 
