@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { RULES, validatePassword, loadDynamicValues, PasswordRule } from '@/lib/password-game-rules'
 import Link from 'next/link'
 
-const TIMER_DURATION = 180
+const TIMER_DURATION = 120
 const CHECKBOX_SPEED = 500 // Bouge toutes les 0.5 secondes (beaucoup plus rapide !)
 
 // Positions possibles pour la checkbox mobile
@@ -103,23 +103,26 @@ export default function PasswordGamePage() {
     }
   }, [valid, validatedRules.length])
 
+  // Vérifier la validation finale automatiquement
+  useEffect(() => {
+    if (
+      validationInput.toLowerCase() === password.toLowerCase() &&
+      validationInput !== '' &&
+      isCheckboxChecked &&
+      valid &&
+      validatedRules.length === RULES.length &&
+      !gameCompleted
+    ) {
+      setGameCompleted(true)
+    }
+  }, [validationInput, password, isCheckboxChecked, valid, validatedRules.length, gameCompleted])
+
   // ============================================================================
   // HANDLERS
   // ============================================================================
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
-  }
-
-  const handleFinalValidation = () => {
-    if (
-      validationInput.toLowerCase() === password.toLowerCase() &&
-      isCheckboxChecked &&
-      valid &&
-      validatedRules.length === RULES.length
-    ) {
-      setGameCompleted(true)
-    }
   }
 
   // ============================================================================
@@ -148,43 +151,7 @@ export default function PasswordGamePage() {
   }
 
   // ============================================================================
-  // RENDU - ÉCRAN DE VICTOIRE
-  // ============================================================================
-
-  if (gameCompleted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-500 to-blue-500 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-12 max-w-2xl text-center">
-          <div className="text-8xl mb-6">🎉</div>
-          <h1 className="text-5xl font-bold mb-4 text-gray-800">Félicitations !</h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Vous avez réussi à créer un mot de passe valide malgré toutes les contraintes frustantes.
-          </p>
-          <div className="bg-gray-100 rounded-lg p-6 mb-8">
-            <p className="text-sm text-gray-500 mb-2">Votre mot de passe victorieux :</p>
-            <p className="font-mono text-2xl font-bold text-green-600 break-all">{password}</p>
-          </div>
-          <div className="space-y-4">
-            <div className="text-lg text-gray-700">
-              <span className="font-semibold">{RULES.length} règles</span> validées
-            </div>
-            <div className="text-lg text-gray-700">
-              Temps écoulé : <span className="font-semibold">{formatTime(TIMER_DURATION - timeRemaining)}</span>
-            </div>
-          </div>
-          <Link
-            href="/"
-            className="mt-8 inline-block px-8 py-4 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
-          >
-            Retour à l'accueil
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  // ============================================================================
-  // RENDU - JEU EN COURS
+  // RENDU
   // ============================================================================
 
   return (
@@ -392,8 +359,46 @@ export default function PasswordGamePage() {
           ÉLÉMENTS FRUSTRANTS
           ======================================================================== */}
 
+      {/* Popup de félicitations (apparaît après la validation finale) */}
+      {gameCompleted && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md text-center transform animate-bounce">
+            <h2 className="text-4xl font-bold text-green-600 mb-4">
+              🎉 Bravo c'est fini ! 🎉
+            </h2>
+            <p className="text-lg text-gray-700 mb-6">
+              Vous avez réussi à valider toutes les règles et la validation finale !
+            </p>
+
+            {/* GIF de célébration */}
+            <div className="mb-6 rounded-xl overflow-hidden">
+              <iframe
+                src="https://giphy.com/embed/g9582DNuQppxC"
+                width="100%"
+                height="240"
+                frameBorder="0"
+                className="giphy-embed"
+                allowFullScreen
+              />
+            </div>
+
+            <div className="bg-gray-100 rounded-lg p-6 mb-6">
+              <p className="text-sm text-gray-500 mb-2">Votre mot de passe victorieux :</p>
+              <p className="font-mono text-xl font-bold text-green-600 break-all">{password}</p>
+            </div>
+
+            <Link
+              href="/"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-bold hover:shadow-lg transform hover:scale-105 transition-all"
+            >
+              Retour à l'accueil
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Champ de validation en bas à droite (apparaît quand toutes les règles sont OK) */}
-      {showValidationField && (
+      {showValidationField && !gameCompleted && (
         <div className="fixed bottom-4 right-4 bg-white border-4 border-purple-500 rounded-xl p-6 shadow-2xl max-w-sm z-20 animate-bounce">
           <h3 className="font-bold text-purple-800 mb-3 flex items-center gap-2">
             🎮 Validation finale
@@ -420,7 +425,7 @@ export default function PasswordGamePage() {
       )}
 
       {/* Checkbox qui bouge (apparaît avec le champ de validation) */}
-      {showValidationField && (
+      {showValidationField && !gameCompleted && (
         <div
           className="fixed transition-all duration-500 ease-in-out z-30"
           style={CHECKBOX_POSITIONS[checkboxPosition]}
@@ -429,12 +434,7 @@ export default function PasswordGamePage() {
             <input
               type="checkbox"
               checked={isCheckboxChecked}
-              onChange={(e) => {
-                setIsCheckboxChecked(e.target.checked)
-                if (e.target.checked && validationInput.toLowerCase() === password.toLowerCase()) {
-                  handleFinalValidation()
-                }
-              }}
+              onChange={(e) => setIsCheckboxChecked(e.target.checked)}
               className="w-6 h-6"
             />
             <span className="font-bold text-lg">Je certifie !</span>
