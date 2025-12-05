@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Team Info */}
           <div>
             <h3 className="text-xl font-bold mb-4">Golem Gang</h3>
@@ -24,6 +24,19 @@ export default function Footer() {
             <p className="text-gray-300 text-sm">
               Créer une plateforme ludique et éducative sur les enjeux du numérique responsable
             </p>
+          </div>
+
+          {/* Participants */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">Participants</h3>
+            <ul className="space-y-1 text-sm text-gray-300">
+              <li>Cyprien BONS</li>
+              <li>Killian RAMUS</li>
+              <li>Raphël RIVAS</li>
+              <li>Maël NICOLAS</li>
+              <li>Galdric DESERT-CAPAROS</li>
+              <li>Nicolas LYFONG</li>
+            </ul>
           </div>
 
           {/* Links */}
