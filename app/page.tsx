@@ -1,24 +1,28 @@
+'use client'
+
 import Link from 'next/link'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function Home() {
+    const { t } = useLanguage()
     const features = [
         {
-            title: 'Simulateur d\'Empreinte',
-            description: 'Calculez votre impact numérique et gagnez des badges',
+            title: t.home.features.simulator.title,
+            description: t.home.features.simulator.description,
             icon: '📊',
             href: '/simulateur',
             color: 'from-blue-500 to-cyan-500',
         },
         {
-            title: 'Test tes Connaissances',
-            description: 'Évalue tes connaissances en NIRD et cybersécurité',
+            title: t.home.features.test.title,
+            description: t.home.features.test.description,
             icon: '🧠',
             href: '/test-connaissances',
             color: 'from-green-500 to-emerald-500',
         },
         {
-            title: 'Password Game',
-            description: 'Créez le mot de passe le plus frustrant possible',
+            title: t.home.features.passwordGame.title,
+            description: t.home.features.passwordGame.description,
             icon: '🎮',
             href: '/password-game',
             color: 'from-red-500 to-orange-500',
@@ -31,17 +35,17 @@ export default function Home() {
             <section className="relative py-20 px-4 overflow-hidden">
                 <div className="max-w-6xl mx-auto text-center">
                     <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent animate-fade-in">
-                        Numérique Responsable
+                        {t.home.title}
                     </h1>
                     <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto animate-slide-up">
-                        Découvrez les enjeux du numérique responsable de manière ludique et interactive
+                        {t.home.subtitle}
                     </p>
                     <div className="flex justify-center animate-slide-up">
                         <Link
                             href="/simulateur"
                             className="px-8 py-4 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
                         >
-                            Commencer l'Aventure
+                            {t.home.cta}
                         </Link>
                     </div>
                 </div>
@@ -57,10 +61,10 @@ export default function Home() {
             <section className="py-16 px-4 bg-gradient-to-br from-purple-50 to-blue-50">
                 <div className="max-w-6xl mx-auto">
                     <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
-                        Défis Nuit de l'Info 2025
+                        {t.home.challenges.title}
                     </h2>
                     <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-                        Notre équipe participe à 3 défis complémentaires pour enrichir l'expérience
+                        {t.home.challenges.subtitle}
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-6">
@@ -69,18 +73,17 @@ export default function Home() {
                             <div className="flex items-center gap-2 mb-3">
                                 <span className="text-3xl">🔧</span>
                                 <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
-                                    Développement Sécurisé
+                                    {t.home.challenges.extensions.tag}
                                 </div>
                             </div>
                             <h3 className="text-xl font-bold mb-2 text-gray-800">
-                                La Ligue des Extensions
+                                {t.home.challenges.extensions.title}
                             </h3>
                             <p className="text-sm text-gray-600 mb-3">
-                                Extension Chrome Manifest V3, open source et utile pour améliorer la navigation
-                                quotidienne
+                                {t.home.challenges.extensions.description}
                             </p>
                             <div className="text-xs text-gray-500 italic">
-                                Manifestement à jour, open source et utile
+                                {t.home.challenges.extensions.tagline}
                             </div>
                         </div>
 
@@ -93,16 +96,16 @@ export default function Home() {
                                     <span className="text-3xl">🎮</span>
                                     <div
                                         className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-semibold">
-                                        Ergonomie
+                                        {t.home.challenges.ergonomics.tag}
                                     </div>
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-800">
-                                    Simplifier pour mieux vivre
+                                    {t.home.challenges.ergonomics.title}
                                 </h3>
                                 <p className="text-sm text-gray-600 mb-3">
-                                    Création d'un champ de saisie volontairement frustrant et original
+                                    {t.home.challenges.ergonomics.description}
                                 </p>
-                                → Voir le Password Game
+                                {t.home.challenges.ergonomics.link}
                             </div>
                         </Link>
 
@@ -113,17 +116,17 @@ export default function Home() {
                                 <span className="text-3xl">💬</span>
                                 <div
                                     className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-semibold">
-                                    Chatbot
+                                    {t.home.challenges.chatbot.tag}
                                 </div>
                             </div>
                             <h3 className="text-xl font-bold mb-2 text-gray-800">
-                                Chat'bruti
+                                {t.home.challenges.chatbot.title}
                             </h3>
                             <p className="text-sm text-gray-600 mb-3">
-                                Chatbot avec personnalité décalée, drôle et inutilement philosophe
+                                {t.home.challenges.chatbot.description}
                             </p>
                             <div className="text-xs text-green-600 font-semibold">
-                                💡 Accessible via le bouton en bas à droite
+                                {t.home.challenges.chatbot.info}
                             </div>
                         </div>
                     </div>
@@ -134,7 +137,7 @@ export default function Home() {
             <section className="py-16 px-4 bg-white/50">
                 <div className="max-w-6xl mx-auto">
                     <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-                        Explorez nos modules interactifs
+                        {t.home.features.title}
                     </h2>
                     <div className="grid md:grid-cols-2 gap-8">
                         {features.map((feature, index) => (
@@ -150,7 +153,7 @@ export default function Home() {
                                     <div className="text-6xl mb-4">{feature.icon}</div>
                                     <h3 className="text-2xl font-bold mb-3 text-gray-800">{feature.title}</h3>
                                     <p className="text-gray-600 mb-4">{feature.description}</p>
-                                    <span className="inline-flex items-center text-green-600 font-semibold group-hover:gap-2 transition-all">Découvrir
+                                    <span className="inline-flex items-center text-green-600 font-semibold group-hover:gap-2 transition-all">{t.home.features.discover}
                     <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none"
                          stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>

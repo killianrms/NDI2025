@@ -2,15 +2,17 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const { language, setLanguage, t } = useLanguage()
 
   const navItems = [
-    { href: '/', label: 'Accueil' },
-    { href: '/simulateur', label: 'Simulateur' },
-    { href: '/test-connaissances', label: 'Test tes Connaissances' },
-    { href: '/password-game', label: 'Password Game' },
+    { href: '/', label: t.nav.home },
+    { href: '/simulateur', label: t.nav.simulator },
+    { href: '/test-connaissances', label: t.nav.test },
+    { href: '/password-game', label: t.nav.passwordGame },
   ]
 
   return (
@@ -25,7 +27,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -35,6 +37,16 @@ export default function Navigation() {
                 {item.label}
               </Link>
             ))}
+
+            {/* Language Switcher */}
+            <button
+              onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+              className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 transition-colors"
+              title={language === 'fr' ? 'Switch to English' : 'Passer en Français'}
+            >
+              <span className="text-lg">{language === 'fr' ? '🇬🇧' : '🇫🇷'}</span>
+              <span>{language === 'fr' ? 'EN' : 'FR'}</span>
+            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -75,6 +87,18 @@ export default function Navigation() {
                 {item.label}
               </Link>
             ))}
+
+            {/* Mobile Language Switcher */}
+            <button
+              onClick={() => {
+                setLanguage(language === 'fr' ? 'en' : 'fr')
+                setIsOpen(false)
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50"
+            >
+              <span className="text-lg">{language === 'fr' ? '🇬🇧' : '🇫🇷'}</span>
+              <span>{language === 'fr' ? 'English' : 'Français'}</span>
+            </button>
           </div>
         </div>
       )}
