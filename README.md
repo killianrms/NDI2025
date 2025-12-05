@@ -16,5 +16,4 @@ Ouvrir [http://localhost:3000](http://localhost:3000)
 
 <362025kWhdécembrecoII
 
-Aussi je veux que tu rajoute des popup casse couille qui s'affiche pour nous faire chier, genre accepter cookie, mise a jour disponnible, activer windows 11
-la 
+Je veux que tu rajoute dans le footer des participant : Cyprien BONS, Killian RAMUS, Raphël RIVAS, Maël NICOLAS, Galdric DESERT-CAPAROS, Nicolas LYFONG
