@@ -47,6 +47,7 @@ export interface Project {
   }
   category: string
   videoUrl?: string
+  link?: string
 }
 
 export interface Challenge {

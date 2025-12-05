@@ -24,6 +24,7 @@ export const translations = {
           title: 'La Ligue des Extensions',
           description: 'Extension Chrome Manifest V3 "SafeLinks", qui détecte si un lien est sur avant de cliquer, en open source et utile pour améliorer la navigation quotidienne',
           tagline: 'Manifestement à jour, open source et utile',
+          link: 'https://github.com/Mael-Nicolas/SafeLink',
         },
 
         ergonomics: {

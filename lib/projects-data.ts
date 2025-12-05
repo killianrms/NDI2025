@@ -8,11 +8,20 @@ export const projects: Project[] = [
     location: { lat: 43.6319, lng: 3.8620 },
     category: 'Fab Lab',
   },
+  {
+    id: 'safelinks-extension',
+    name: 'SafeLinks',
+    description: 'Extension Chrome Manifest V3 open source qui détecte si un lien est sûr avant de cliquer. Améliore la sécurité de navigation quotidienne en analysant les URLs en temps réel. Manifestement à jour et utile pour protéger contre les liens malveillants.',
+    location: { lat: 43.6108, lng: 3.8767 },
+    category: 'Extension',
+    link: 'https://github.com/Mael-Nicolas/SafeLink',
+  },
 ]
 
 export const categories = [
   { id: 'all', name: 'Tous', color: 'gray' },
   { id: 'Fab Lab', name: 'Fab Lab', color: 'blue' },
+  { id: 'Extension', name: 'Extension', color: 'green' },
 ]
 
 export const quizQuestions = [
