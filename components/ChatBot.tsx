@@ -7,12 +7,23 @@ interface Message {
   content: string
 }
 
+const WELCOME_MESSAGES = [
+  "Bonjour ! Je suis Jean-Philosophe, penseur du... Attends, de quoi parlais-je... Ah oui ! As-tu déjà questionné l'existence des nuages ?",
+  "Salutations ! Je réfléchissais à la profondeur du numérique... Euh... j'ai oublié. Bref, les cuillères ont-elles des rêves ?",
+  "Ah, te voilà ! Je me demandais si les serveurs... Hein ? Où en étais-je... Peu importe, pourquoi les chaussettes disparaissent-elles ?",
+  "Bienvenue ! La philosophie du cloud m'interroge sur... Zut, j'ai perdu le fil. Dis-moi, les triangles sont-ils jaloux des cercles ?",
+  "Oh bonjour ! Je méditais sur l'essence des pixels... Attendez, c'était quoi déjà ? Ah ! Les pigeons complotent-ils en secret ?",
+  "Salut à toi ! Le Wi-Fi n'est-il pas une forme de... Oh là, mon esprit s'égare... Les portes envient-elles les fenêtres ?",
+  "Hé ! Je contemplais la nature des cookies... Un instant, qu'est-ce que je disais... Bref, le silence a-t-il une couleur ?",
+  "Coucou ! Les algorithmes sont comme des... Euh... j'ai complètement oublié. Bon ! Les fourchettes craignent-elles les cuillères ?",
+]
+
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Bonjour ! Je suis Jean-Philosophe, penseur du... Attends, de quoi parlais-je... Ah oui ! As-tu déjà questionné l'existence des nuages ?",
+      content: WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)],
     },
   ])
   const [input, setInput] = useState('')
