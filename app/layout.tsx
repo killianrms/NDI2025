@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Numérique Responsable - NIRD',
   description: 'Application interactive dédiée aux enjeux du Numérique Responsable',
   keywords: ['numérique responsable', 'écologie', 'environnement', 'digital', 'éducation'],
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
