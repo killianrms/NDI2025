@@ -30,21 +30,17 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        run: |
-          cd nird-app
-          npm ci
+        run: npm ci
 
       - name: Build with Next.js
-        run: |
-          cd nird-app
-          npm run build
+        run: npm run build
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./nird-app/out
+          path: ./out
 
   deploy:
     environment:
