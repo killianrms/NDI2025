@@ -16,20 +16,17 @@ export default function SimulatorPage() {
   const [showResults, setShowResults] = useState(false)
   const [carbonFootprint, setCarbonFootprint] = useState(0)
   const [points, setPoints] = useState(0)
-  const [level, setLevel] = useState(1)
   const [badges, setBadges] = useState<Badge[]>([])
   const [recommendations, setRecommendations] = useState<string[]>([])
 
   const handleCalculate = () => {
     const carbon = calculateCarbonFootprint(data)
     const pts = calculatePoints(carbon)
-    const lvl = getLevel(pts)
     const bdgs = checkBadges(data, pts)
     const recs = getRecommendations(data)
 
     setCarbonFootprint(carbon)
     setPoints(pts)
-    setLevel(lvl)
     setBadges(bdgs)
     setRecommendations(recs)
     setShowResults(true)
@@ -179,16 +176,10 @@ export default function SimulatorPage() {
               </div>
             </div>
 
-            {/* Points and Level */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl shadow-xl p-8 text-white">
-                <h3 className="text-xl font-bold mb-2">Points Éco-Responsables</h3>
-                <div className="text-5xl font-bold">{points}</div>
-              </div>
-              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl shadow-xl p-8 text-white">
-                <h3 className="text-xl font-bold mb-2">Niveau</h3>
-                <div className="text-5xl font-bold">Niveau {level}</div>
-              </div>
+            {/* Points */}
+            <div className="bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl shadow-xl p-8 text-white text-center">
+              <h3 className="text-xl font-bold mb-2">Points Éco-Responsables</h3>
+              <div className="text-5xl font-bold">{points} / 1000</div>
             </div>
 
             {/* Badges */}
