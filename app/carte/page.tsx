@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { projects, quizQuestions } from '@/lib/projects-data'
+import { projects } from '@/lib/projects-data'
 import { Project } from '@/lib/types'
+import { useState } from 'react'
 
 // Import Map dynamically to avoid SSR issues with Leaflet
 const Map = dynamic(() => import('@/components/Map'), {
@@ -15,93 +15,11 @@ const Map = dynamic(() => import('@/components/Map'), {
   ),
 })
 
-// Shuffle array function
-function shuffleArray<T>(array: T[]): T[] {
-  const newArray = [...array]
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]]
-  }
-  return newArray
-}
-
-interface ShuffledQuestion {
-  question: string
-  options: string[]
-  correctIndex: number
-  explanation: string
-}
-
 export default function MapPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-  const [showQuiz, setShowQuiz] = useState(false)
-  const [shuffledQuestions, setShuffledQuestions] = useState<ShuffledQuestion[]>([])
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [score, setScore] = useState(0)
-  const [quizCompleted, setQuizCompleted] = useState(false)
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
-  const [showExplanation, setShowExplanation] = useState(false)
-  const [userAnswers, setUserAnswers] = useState<number[]>([])
-  const [showResults, setShowResults] = useState(false)
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project)
-    setShowQuiz(false)
-    setQuizCompleted(false)
-    setCurrentQuestion(0)
-    setScore(0)
-    setShowResults(false)
-  }
-
-  const startQuiz = () => {
-    // Shuffle questions
-    const shuffled = shuffleArray(quizQuestions).map(q => {
-      // Create array of options with their original indices
-      const optionsWithIndices = q.options.map((opt, idx) => ({ option: opt, wasCorrect: idx === q.correct }))
-      // Shuffle options
-      const shuffledOptions = shuffleArray(optionsWithIndices)
-      // Find new index of correct answer
-      const correctIndex = shuffledOptions.findIndex(o => o.wasCorrect)
-
-      return {
-        question: q.question,
-        options: shuffledOptions.map(o => o.option),
-        correctIndex,
-        explanation: q.explanation,
-      }
-    })
-
-    setShuffledQuestions(shuffled)
-    setShowQuiz(true)
-    setCurrentQuestion(0)
-    setScore(0)
-    setSelectedAnswer(null)
-    setShowExplanation(false)
-    setUserAnswers([])
-    setShowResults(false)
-  }
-
-  const handleAnswer = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex)
-    setShowExplanation(true)
-
-    if (answerIndex === shuffledQuestions[currentQuestion].correctIndex) {
-      setScore(score + 1)
-    }
-  }
-
-  const handleNextQuestion = () => {
-    if (selectedAnswer !== null) {
-      setUserAnswers([...userAnswers, selectedAnswer])
-    }
-
-    if (currentQuestion < shuffledQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      setSelectedAnswer(null)
-      setShowExplanation(false)
-    } else {
-      setQuizCompleted(true)
-    }
   }
 
   return (
@@ -148,146 +66,33 @@ export default function MapPage() {
                 <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-6">
                   <h3 className="font-bold text-lg mb-3 text-gray-800">Informations pratiques</h3>
                   <div className="space-y-2 text-gray-700">
-                    <p>Adresse : 99 Avenue d'Occitanie, 34090 Montpellier</p>
-                    <p>Horaires : Lundi au vendredi, 9h-12h et 13h-17h</p>
-                    <p>Accès : Gratuit</p>
+                    <p><strong>Adresse :</strong> 99 Avenue d'Occitanie, 34090 Montpellier</p>
+                    <p><strong>Horaires :</strong> Lundi au vendredi, 9h-12h et 13h-17h</p>
+                    <p><strong>Accès :</strong> Gratuit pour étudiants et professionnels</p>
                   </div>
                 </div>
 
-                <button
-                  onClick={startQuiz}
-                  className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-                >
-                  Testez vos connaissances
-                </button>
-
-                {/* Quiz Section */}
-                {showQuiz && !quizCompleted && shuffledQuestions.length > 0 && (
-                  <div className="mt-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 animate-fade-in">
-                    <div className="mb-4">
-                      <div className="text-sm text-gray-600 mb-2">
-                        Question {currentQuestion + 1}/{shuffledQuestions.length}
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all"
-                          style={{ width: `${((currentQuestion + 1) / shuffledQuestions.length) * 100}%` }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">
-                      {shuffledQuestions[currentQuestion].question}
-                    </h3>
-
-                    <div className="space-y-3 mb-4">
-                      {shuffledQuestions[currentQuestion].options.map((option, index) => (
-                        <button
-                          key={index}
-                          onClick={() => !showExplanation && handleAnswer(index)}
-                          disabled={showExplanation}
-                          className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                            showExplanation
-                              ? index === shuffledQuestions[currentQuestion].correctIndex
-                                ? 'border-green-500 bg-green-50'
-                                : selectedAnswer === index
-                                ? 'border-red-500 bg-red-50'
-                                : 'border-gray-200 bg-gray-50'
-                              : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
-                          } ${showExplanation ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-
-                    {showExplanation && (
-                      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-4 animate-fade-in">
-                        <p className="text-gray-700">{shuffledQuestions[currentQuestion].explanation}</p>
-                      </div>
-                    )}
-
-                    {showExplanation && (
-                      <button
-                        onClick={handleNextQuestion}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-                      >
-                        {currentQuestion < shuffledQuestions.length - 1 ? 'Question suivante' : 'Voir le résultat'}
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* Quiz Results */}
-                {quizCompleted && (
-                  <div className="mt-6 animate-fade-in space-y-4">
-                    <div className="bg-gradient-to-br from-green-500 to-blue-500 rounded-xl p-8 text-white text-center">
-                      <div className="text-6xl mb-4">
-                        {score === shuffledQuestions.length ? '🏆' : score >= shuffledQuestions.length / 2 ? '🌟' : '💪'}
-                      </div>
-                      <h3 className="text-3xl font-bold mb-2">Quiz terminé</h3>
-                      <p className="text-2xl mb-4">Score : {score}/{shuffledQuestions.length}</p>
-                      <p className="text-lg opacity-90">
-                        {score === shuffledQuestions.length
-                          ? 'Parfait ! Vous êtes un expert du numérique responsable'
-                          : score >= shuffledQuestions.length / 2
-                          ? 'Bien joué ! Continuez à apprendre'
-                          : 'Continuez vos efforts, chaque pas compte'}
-                      </p>
-
-                      <div className="flex gap-4 mt-6">
-                        <button
-                          onClick={() => setShowResults(!showResults)}
-                          className="flex-1 bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-                        >
-                          {showResults ? 'Masquer' : 'Voir les réponses'}
-                        </button>
-                        <button
-                          onClick={startQuiz}
-                          className="flex-1 bg-white/20 text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/30 transition-all"
-                        >
-                          Recommencer
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Detailed Results */}
-                    {showResults && (
-                      <div className="bg-white rounded-xl p-6 border-2 border-gray-200 animate-fade-in">
-                        <h4 className="text-xl font-bold mb-4 text-gray-800">Récapitulatif des réponses</h4>
-                        <div className="space-y-4">
-                          {shuffledQuestions.map((q, index) => {
-                            const userAnswer = userAnswers[index]
-                            const isCorrect = userAnswer === q.correctIndex
-
-                            return (
-                              <div key={index} className={`p-4 rounded-xl border-2 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'}`}>
-                                <div className="flex items-start gap-2 mb-2">
-                                  <span className="text-xl">{isCorrect ? '✅' : '❌'}</span>
-                                  <div className="flex-1">
-                                    <p className="font-semibold text-gray-800 mb-2">Q{index + 1}: {q.question}</p>
-
-                                    {!isCorrect && (
-                                      <div className="mb-2">
-                                        <p className="text-sm text-red-700">Votre réponse : {q.options[userAnswer]}</p>
-                                      </div>
-                                    )}
-
-                                    <div className="mb-2">
-                                      <p className="text-sm text-green-700 font-semibold">Bonne réponse : {q.options[q.correctIndex]}</p>
-                                    </div>
-
-                                    <p className="text-sm text-gray-600 italic">{q.explanation}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div className="bg-blue-50 rounded-xl p-6">
+                  <h3 className="font-bold text-lg mb-3 text-gray-800">Équipements disponibles</h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      Imprimantes 3D
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      Découpeuse laser
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      Fraiseuse numérique
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      Atelier électronique et codage
+                    </li>
+                  </ul>
+                </div>
               </div>
             ) : (
               <div className="bg-white rounded-2xl shadow-xl p-8 flex items-center justify-center h-full">

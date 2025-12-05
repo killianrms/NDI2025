@@ -9,9 +9,9 @@ export default function Navigation() {
   const navItems = [
     { href: '/', label: 'Accueil' },
     { href: '/simulateur', label: 'Simulateur' },
-    { href: '/cycle-de-vie', label: 'Cycle de Vie' },
+    { href: '/test-connaissances', label: 'Test tes Connaissances' },
     { href: '/carte', label: 'Carte Interactive' },
-    { href: '/escape-game', label: 'Escape Game' },
+    { href: '/password-game', label: 'Password Game' },
   ]
 
   return (
