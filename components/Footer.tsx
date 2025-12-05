@@ -17,13 +17,16 @@ export default function Footer() {
 
           {/* Challenge Info */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Nuit de l'Info 2025</h3>
+            <h3 className="text-xl font-bold mb-4">Nuit de l'Info 2025 Défi :</h3>
             <p className="text-gray-300 text-sm mb-2">
-              Défi : Sensibilisation au Numérique Responsable
+                La Ligue des Extensions : Manifestement à jour, open source et utile.
             </p>
-            <p className="text-gray-300 text-sm">
-              Créer une plateforme ludique et éducative sur les enjeux du numérique responsable
-            </p>
+             <p className="text-gray-300 text-sm">
+                L'ergonomie : simplifier pour mieux vivre.
+             </p>
+              <p className="text-gray-300 text-sm">
+                  Chat'bruti
+              </p>
           </div>
 
           {/* Participants */}
@@ -36,6 +39,7 @@ export default function Footer() {
               <li>Maël NICOLAS</li>
               <li>Galdric DESERT-CAPAROS</li>
               <li>Nicolas LYFONG</li>
+                <li>Marc HAYE</li>
             </ul>
           </div>
 
