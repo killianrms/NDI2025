@@ -218,21 +218,50 @@ export default function PasswordGamePage() {
             </p>
           </div>
 
-          {/* Progression */}
+          {/* Progression des règles */}
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-gray-700">
-                Règles validées : {validatedRulesCount}/{RULES.length}
+                Règles validées : {validatedRules.length}/{RULES.length}
               </span>
-              <span className="text-sm text-gray-600">{getProgressPercentage().toFixed(0)}%</span>
+              <span className="text-sm text-gray-600">{((validatedRules.length / RULES.length) * 100).toFixed(0)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div
                 className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all duration-500"
-                style={{ width: `${getProgressPercentage()}%` }}
+                style={{ width: `${(validatedRules.length / RULES.length) * 100}%` }}
               />
             </div>
           </div>
+
+          {/* Barre de progression dorée pour la validation finale */}
+          {validatedRules.length === RULES.length && !gameCompleted && (
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-yellow-700">
+                  🏆 Validation finale
+                </span>
+                <span className="text-sm text-yellow-600">
+                  {isCheckboxChecked && validationInput.toLowerCase() === password.toLowerCase() ? '2/2' :
+                   validationInput.toLowerCase() === password.toLowerCase() ? '1/2' :
+                   isCheckboxChecked ? '1/2' : '0/2'}
+                </span>
+              </div>
+              <div className="w-full bg-yellow-200 rounded-full h-3 border-2 border-yellow-400">
+                <div
+                  className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(isCheckboxChecked && validationInput.toLowerCase() === password.toLowerCase() ? 100 :
+                              validationInput.toLowerCase() === password.toLowerCase() ? 50 :
+                              isCheckboxChecked ? 50 : 0)}%`
+                  }}
+                />
+              </div>
+              <p className="text-xs text-yellow-700 mt-1">
+                ✓ Remplir le champ en bas à droite | ✓ Cocher la checkbox qui bouge
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -260,6 +289,19 @@ export default function PasswordGamePage() {
             {showHints ? '🙈 Cacher' : '💡 Afficher'} les indices
           </button>
         </div>
+
+        {/* Message quand toutes les règles sont respectées - DÉPLACÉ EN HAUT */}
+        {valid && validatedRules.length === RULES.length && (
+          <div className="mb-6 bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6 animate-pulse">
+            <h3 className="font-bold text-yellow-800 text-xl mb-2">
+              🎯 Presque terminé !
+            </h3>
+            <p className="text-yellow-700 mb-4">
+              Toutes les règles sont validées ! Maintenant, trouvez le champ de validation en bas à droite
+              et la checkbox qui bouge pour terminer le jeu...
+            </p>
+          </div>
+        )}
 
         {/* Règle actuelle (une seule à la fois) */}
         <div className="space-y-4">
@@ -344,19 +386,6 @@ export default function PasswordGamePage() {
               )
             })}
         </div>
-
-        {/* Message quand toutes les règles sont respectées */}
-        {valid && validatedRules.length === RULES.length && (
-          <div className="mt-6 bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6">
-            <h3 className="font-bold text-yellow-800 text-xl mb-2">
-              🎯 Presque terminé !
-            </h3>
-            <p className="text-yellow-700 mb-4">
-              Toutes les règles sont validées ! Maintenant, trouvez le champ de validation en bas à droite
-              et la checkbox qui bouge pour terminer le jeu...
-            </p>
-          </div>
-        )}
       </div>
 
       {/* ========================================================================
